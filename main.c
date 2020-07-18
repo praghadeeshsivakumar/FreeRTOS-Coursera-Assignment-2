@@ -243,12 +243,12 @@ static void priorityset_task() {
 			printf("Updated Priority of Communication Task is %d\n", uxTaskPriorityGet(communication_handle));
 			fflush(stdout);
 		}
-		else if (tickCommunication < 200 && uxTaskPriorityGet(communication_handle) != 2) {
+		else if (tickCommunication < 200 && uxTaskPriorityGet(communication_handle) != 2 && tickCommunication!=0) {
 			vTaskPrioritySet(communication_handle, 2);
 			printf("Updated Priority of Communication Task is %d\n", uxTaskPriorityGet(communication_handle));
 			fflush(stdout);
 		}
-		vTaskDelay(10);	
+		vTaskDelay(200);	
 	}
 }
 
@@ -319,10 +319,7 @@ void vApplicationIdleHook( void )
 			}
 		}
 	*/
-	tickMatrix++;
-	if (active == TRUE) {
-		tickCommunication++;
-	}
+	
 	#if ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY != 1 )
 	{
 		/* Call the idle task processing used by the full demo.  The simple
@@ -354,6 +351,10 @@ void vApplicationTickHook( void )
 	added here, but the tick hook is called from an interrupt context, so
 	code must not attempt to block, and only the interrupt safe FreeRTOS API
 	functions can be used (those that end in FromISR()). */
+	tickMatrix++;
+	if (active == TRUE) {
+		tickCommunication++;
+	}
 	#if ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY != 1 )
 	{
 		vFullDemoTickHookFunction();
